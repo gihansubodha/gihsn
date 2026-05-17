@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Will You Be My Valentine?</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Comic Sans MS", "Trebuchet MS", cursive, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffd1f4, #ffc2e2, #ffe1f5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ff5d73;
+    }
+
+    .page {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      isolation: isolate;
+    }
+
+    .soft-glow {
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.28);
+      filter: blur(10px);
+      z-index: -1;
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 4.8rem);
+      margin-bottom: 34px;
+      letter-spacing: 1px;
+      color: #ff6478;
+      text-shadow: 0 4px 18px rgba(255, 99, 130, 0.25);
+      animation: floatTitle 3s ease-in-out infinite;
+    }
+
+    .emoji-heart {
+      display: inline-block;
+      animation: heartbeat 1.2s infinite;
+    }
+
+    .cat-card {
+      position: relative;
+      width: min(280px, 70vw);
+      height: 210px;
+      margin-bottom: 24px;
+      animation: floatCat 3.2s ease-in-out infinite;
+    }
+
+    .cat {
+      position: absolute;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      width: 205px;
+      height: 135px;
+      background: #49c4df;
+      border: 7px solid #3b5668;
+      border-radius: 50px 50px 38px 38px;
+      box-shadow: 0 18px 40px rgba(255, 89, 127, 0.24);
+    }
+
+    .cat::before,
+    .cat::after {
+      content: "";
+      position: absolute;
+      top: -44px;
+      width: 80px;
+      height: 80px;
+      background: #49c4df;
+      border: 7px solid #3b5668;
+      border-bottom: none;
+      transform: rotate(45deg);
+      border-radius: 18px 6px 0 6px;
+      z-index: -1;
+    }
+
+    .cat::before {
+      left: 13px;
+    }
+
+    .cat::after {
+      right: 13px;
+    }
+
+    .inner-ear-left,
+    .inner-ear-right {
+      position: absolute;
+      top: -24px;
+      width: 28px;
+      height: 28px;
+      background: #ffb1c4;
+      transform: rotate(45deg);
+      border-radius: 7px;
+    }
+
+    .inner-ear-left { left: 35px; }
+    .inner-ear-right { right: 35px; }
+
+    .face {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 145px;
+      height: 70px;
+    }
+
+    .eye {
+      position: absolute;
+      top: 12px;
+      width: 34px;
+      height: 18px;
+      border-bottom: 6px solid #384b5b;
+      border-radius: 0 0 40px 40px;
+    }
+
+    .eye.left {
+      left: 10px;
+      transform: rotate(14deg);
+    }
+
+    .eye.right {
+      right: 10px;
+      transform: rotate(-14deg);
+    }
+
+    .mouth {
+      position: absolute;
+      top: 34px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 48px;
+      height: 28px;
+    }
+
+    .mouth::before,
+    .mouth::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 24px;
+      height: 22px;
+      border-bottom: 5px solid #384b5b;
+      border-radius: 0 0 24px 24px;
+    }
+
+    .mouth::before {
+      left: 2px;
+      transform: rotate(12deg);
+    }
+
+    .mouth::after {
+      right: 2px;
+      transform: rotate(-12deg);
+    }
+
+    .belly {
+      position: absolute;
+      left: 50%;
+      bottom: -7px;
+      transform: translateX(-50%);
+      width: 92px;
+      height: 42px;
+      background: #fff7f7;
+      border-radius: 50px 50px 0 0;
+    }
+
+    .paw-heart {
+      position: absolute;
+      left: 50%;
+      top: -3px;
+      transform: translateX(-50%);
+      font-size: 25px;
+      animation: heartbeat 1s infinite;
+    }
+
+    .buttons {
+      display: flex;
+      gap: clamp(16px, 4vw, 28px);
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      color: white;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      border-radius: 999px;
+      box-shadow: 0 18px 34px rgba(255, 91, 125, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: floatButton 2.4s ease-in-out infinite;
+    }
+
+    button:hover {
+      transform: translateY(-8px) scale(1.08);
+      box-shadow: 0 22px 44px rgba(255, 91, 125, 0.38);
+    }
+
+    #yesBtn {
+      font-size: clamp(1.8rem, 5vw, 3.4rem);
+      padding: 22px 54px;
+      background: linear-gradient(135deg, #7dc8ff, #9dd8ff);
+    }
+
+    #ofCourseBtn {
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      padding: 18px 34px;
+      background: linear-gradient(135deg, #ff6d7e, #ff9aaa);
+      animation-delay: 0.35s;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+      color: #ff6377;
+      font-weight: 700;
+    }
+
+    .response {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 194, 226, 0.55);
+      backdrop-filter: blur(7px);
+      z-index: 10;
+      padding: 24px;
+    }
+
+    .response.show {
+      display: flex;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .message-box {
+      background: rgba(255, 255, 255, 0.9);
+      border: 4px solid rgba(255, 106, 130, 0.38);
+      border-radius: 34px;
+      padding: clamp(28px, 5vw, 58px);
+      max-width: 720px;
+      box-shadow: 0 30px 80px rgba(255, 91, 125, 0.28);
+      transform: scale(0.4);
+      animation: pop 0.55s cubic-bezier(.17,.89,.32,1.49) forwards;
+    }
+
+    .message-box h2 {
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      color: #ff5d73;
+      margin-bottom: 16px;
+    }
+
+    .message-box p {
+      font-size: clamp(1.1rem, 2.6vw, 1.8rem);
+      color: #ff7890;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .floating-item {
+      position: fixed;
+      bottom: -80px;
+      pointer-events: none;
+      z-index: 20;
+      animation: flyUp linear forwards;
+      filter: drop-shadow(0 8px 10px rgba(255, 73, 112, 0.25));
+    }
+
+    .pop-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 25;
+      animation: heartPop 1.2s ease-out forwards;
+    }
+
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 25;
+      animation: sparklePop 900ms ease-out forwards;
+    }
+
+    @keyframes floatTitle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes floatCat {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-14px) rotate(1deg); }
+    }
+
+    @keyframes floatButton {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-11px); }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.18); }
+      45% { transform: scale(0.96); }
+      70% { transform: scale(1.14); }
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.75; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.4) rotate(-7deg); }
+      70% { transform: scale(1.08) rotate(2deg); }
+      100% { transform: scale(1) rotate(0); }
+    }
+
+    @keyframes flyUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      100% {
+        transform: translateY(-120vh) rotate(25deg) scale(1.25);
+        opacity: 0;
+      }
+    }
+
+    @keyframes heartPop {
+      0% {
+        transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--x), var(--y)) scale(1.6) rotate(30deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes sparklePop {
+      0% {
+        transform: translate(-50%, -50%) scale(0.2);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--x), var(--y)) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .buttons {
+        flex-direction: column;
+      }
+
+      #yesBtn,
+      #ofCourseBtn {
+        width: min(280px, 86vw);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="soft-glow"></div>
+
+    <h1>Will you be my Valentine? <span class="emoji-heart">💝</span></h1>
+
+    <section class="cat-card" aria-label="Cute smiling cat">
+      <div class="cat">
+        <div class="inner-ear-left"></div>
+        <div class="inner-ear-right"></div>
+        <div class="paw-heart">💗</div>
+        <div class="face">
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+          <div class="mouth"></div>
+        </div>
+        <div class="belly"></div>
+      </div>
+    </section>
+
+    <div class="buttons">
+      <button id="yesBtn" type="button">Yes!</button>
+      <button id="ofCourseBtn" type="button">Of course! 🥰</button>
+    </div>
+
+    <p class="footer">From me to you 💕</p>
+  </main>
+
+  <section id="response" class="response" aria-live="polite">
+    <div class="message-box">
+      <h2>Yaaay! 💖</h2>
+      <p>You just made my whole heart smile. Happy Valentine’s, my love! 🎈✨</p>
+    </div>
+  </section>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const ofCourseBtn = document.getElementById("ofCourseBtn");
+    const response = document.getElementById("response");
+
+    const floatingSymbols = ["💖", "💕", "💗", "💓", "🎈", "🎉", "✨", "🌸"];
+
+    function randomBetween(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function createFlyingItem() {
+      const item = document.createElement("span");
+      item.className = "floating-item";
+      item.textContent = floatingSymbols[Math.floor(Math.random() * floatingSymbols.length)];
+      item.style.left = randomBetween(2, 96) + "vw";
+      item.style.fontSize = randomBetween(24, 58) + "px";
+      item.style.animationDuration = randomBetween(3.2, 6.2) + "s";
+      document.body.appendChild(item);
+
+      setTimeout(() => item.remove(), 6500);
+    }
+
+    function createButtonPop(button) {
+      const rect = button.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      for (let i = 0; i < 36; i++) {
+        const heart = document.createElement("span");
+        heart.className = "pop-heart";
+        heart.textContent = i % 5 === 0 ? "🎈" : ["💖", "💕", "💗", "💘"][i % 4];
+        heart.style.left = centerX + "px";
+        heart.style.top = centerY + "px";
+        heart.style.fontSize = randomBetween(20, 42) + "px";
+        heart.style.setProperty("--x", randomBetween(-260, 260) + "px");
+        heart.style.setProperty("--y", randomBetween(-260, 180) + "px");
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1300);
+      }
+
+      for (let i = 0; i < 18; i++) {
+        const sparkle = document.createElement("span");
+        sparkle.className = "sparkle";
+        sparkle.textContent = "✨";
+        sparkle.style.left = centerX + "px";
+        sparkle.style.top = centerY + "px";
+        sparkle.style.fontSize = randomBetween(16, 32) + "px";
+        sparkle.style.setProperty("--x", randomBetween(-220, 220) + "px");
+        sparkle.style.setProperty("--y", randomBetween(-220, 160) + "px");
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 1000);
+      }
+    }
+
+    function celebrate(button) {
+      createButtonPop(button);
+      response.classList.add("show");
+
+      let count = 0;
+      const party = setInterval(() => {
+        createFlyingItem();
+        count++;
+        if (count > 75) clearInterval(party);
+      }, 80);
+    }
+
+    yesBtn.addEventListener("click", () => celebrate(yesBtn));
+    ofCourseBtn.addEventListener("click", () => celebrate(ofCourseBtn));
+
+    setInterval(createFlyingItem, 950);
+  </script>
+</body>
+</html>
