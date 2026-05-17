@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Will You Be My Valentine?</title>
   <style>
     * {
@@ -10,22 +10,32 @@
       padding: 0;
       box-sizing: border-box;
       font-family: "Comic Sans MS", "Trebuchet MS", cursive, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      overflow: hidden;
     }
 
     body {
       min-height: 100vh;
-      overflow: hidden;
+      min-height: 100svh;
       background: linear-gradient(135deg, #ffd1f4, #ffc2e2, #ffe1f5);
       display: flex;
       align-items: center;
       justify-content: center;
       color: #ff5d73;
+      touch-action: manipulation;
     }
 
     .page {
       position: relative;
       width: 100%;
       min-height: 100vh;
+      min-height: 100svh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -37,8 +47,8 @@
 
     .soft-glow {
       position: absolute;
-      width: 420px;
-      height: 420px;
+      width: min(420px, 80vw);
+      height: min(420px, 80vw);
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.28);
       filter: blur(10px);
@@ -47,7 +57,7 @@
     }
 
     h1 {
-      font-size: clamp(2.2rem, 6vw, 4.8rem);
+      font-size: clamp(2rem, 6vw, 4.8rem);
       margin-bottom: 34px;
       letter-spacing: 1px;
       color: #ff6478;
@@ -96,13 +106,8 @@
       z-index: -1;
     }
 
-    .cat::before {
-      left: 13px;
-    }
-
-    .cat::after {
-      right: 13px;
-    }
+    .cat::before { left: 13px; }
+    .cat::after { right: 13px; }
 
     .inner-ear-left,
     .inner-ear-right {
@@ -215,6 +220,8 @@
       box-shadow: 0 18px 34px rgba(255, 91, 125, 0.25);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       animation: floatButton 2.4s ease-in-out infinite;
+      touch-action: manipulation;
+      user-select: none;
     }
 
     button:hover {
@@ -237,12 +244,14 @@
 
     .footer {
       position: absolute;
-      bottom: 32px;
+      bottom: max(24px, env(safe-area-inset-bottom));
       left: 50%;
       transform: translateX(-50%);
       font-size: clamp(1.1rem, 2.2vw, 1.8rem);
       color: #ff6377;
       font-weight: 700;
+      width: 100%;
+      padding: 0 20px;
     }
 
     .response {
@@ -253,7 +262,8 @@
       justify-content: center;
       background: rgba(255, 194, 226, 0.55);
       backdrop-filter: blur(7px);
-      z-index: 10;
+      -webkit-backdrop-filter: blur(7px);
+      z-index: 50;
       padding: 24px;
     }
 
@@ -264,24 +274,25 @@
 
     .message-box {
       position: relative;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.94);
       border: 4px solid rgba(255, 106, 130, 0.38);
       border-radius: 34px;
       padding: clamp(34px, 5vw, 64px);
       max-width: 780px;
+      width: min(780px, 92vw);
       box-shadow: 0 30px 80px rgba(255, 91, 125, 0.28);
       transform: scale(0.4);
       animation: pop 0.55s cubic-bezier(.17,.89,.32,1.49) forwards;
     }
 
     .message-box h2 {
-      font-size: clamp(2.2rem, 6vw, 5rem);
+      font-size: clamp(2rem, 6vw, 5rem);
       color: #ff5d73;
       margin-bottom: 16px;
     }
 
     .message-box p {
-      font-size: clamp(1.1rem, 2.6vw, 1.8rem);
+      font-size: clamp(1rem, 2.6vw, 1.8rem);
       color: #ff7890;
       line-height: 1.5;
       font-weight: 700;
@@ -294,7 +305,8 @@
       width: 42px;
       height: 42px;
       background: linear-gradient(135deg, #ff8ea0, #ff6d7e);
-      font-size: 1.3rem;
+      font-size: 1.4rem;
+      line-height: 1;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -302,34 +314,30 @@
       box-shadow: 0 10px 22px rgba(255, 91, 125, 0.25);
     }
 
-    .quit-btn {
-      margin-top: 28px;
-      padding: 14px 34px;
-      background: linear-gradient(135deg, #b69cff, #8ec5ff);
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      animation: floatButton 2.6s ease-in-out infinite;
-    }
-
     .floating-item {
       position: fixed;
-      bottom: -80px;
+      left: 0;
+      top: 0;
       pointer-events: none;
       z-index: 20;
-      animation: flyUp linear forwards;
+      will-change: transform, opacity;
       filter: drop-shadow(0 8px 10px rgba(255, 73, 112, 0.25));
+      animation: flyUpMobile linear forwards;
     }
 
     .pop-heart {
       position: fixed;
       pointer-events: none;
-      z-index: 25;
+      z-index: 100;
+      will-change: transform, opacity;
       animation: heartPop 1.2s ease-out forwards;
     }
 
     .sparkle {
       position: fixed;
       pointer-events: none;
-      z-index: 25;
+      z-index: 100;
+      will-change: transform, opacity;
       animation: sparklePop 900ms ease-out forwards;
     }
 
@@ -371,14 +379,14 @@
       100% { transform: scale(1) rotate(0); }
     }
 
-    @keyframes flyUp {
+    @keyframes flyUpMobile {
       0% {
-        transform: translateY(0) rotate(0deg) scale(0.8);
+        transform: translate3d(var(--start-x), var(--start-y), 0) rotate(0deg) scale(0.7);
         opacity: 0;
       }
-      10% { opacity: 1; }
+      8% { opacity: 1; }
       100% {
-        transform: translateY(-120vh) rotate(25deg) scale(1.25);
+        transform: translate3d(var(--end-x), -90px, 0) rotate(25deg) scale(1.2);
         opacity: 0;
       }
     }
@@ -406,17 +414,83 @@
     }
 
     @media (max-width: 560px) {
+      .page {
+        justify-content: center;
+        padding: 18px 16px 70px;
+      }
+
+      h1 {
+        font-size: clamp(1.85rem, 9vw, 2.8rem);
+        margin-bottom: 24px;
+      }
+
+      .cat-card {
+        width: 230px;
+        height: 180px;
+        margin-bottom: 16px;
+      }
+
+      .cat {
+        width: 170px;
+        height: 112px;
+        border-width: 6px;
+      }
+
+      .cat::before,
+      .cat::after {
+        top: -36px;
+        width: 64px;
+        height: 64px;
+        border-width: 6px;
+      }
+
+      .inner-ear-left,
+      .inner-ear-right {
+        top: -20px;
+        width: 22px;
+        height: 22px;
+      }
+
+      .inner-ear-left { left: 31px; }
+      .inner-ear-right { right: 31px; }
+
+      .face {
+        transform: translate(-50%, -50%) scale(0.85);
+      }
+
+      .belly {
+        width: 76px;
+        height: 34px;
+      }
+
       .buttons {
         flex-direction: column;
+        gap: 14px;
+        width: 100%;
       }
 
       #yesBtn,
       #ofCourseBtn {
         width: min(280px, 86vw);
+        padding: 17px 28px;
+      }
+
+      #yesBtn {
+        font-size: 2rem;
+      }
+
+      #ofCourseBtn {
+        font-size: 1.35rem;
       }
 
       .message-box {
-        padding-top: 62px;
+        padding: 62px 24px 34px;
+        border-radius: 28px;
+      }
+
+      .close-x {
+        top: 12px;
+        right: 12px;
       }
     }
   </style>
@@ -454,7 +528,6 @@
       <button id="closeX" class="close-x" type="button" aria-label="Close popup">×</button>
       <h2 id="answerTitle">Yaaay! 💖</h2>
       <p id="answerMessage">You just made my whole heart smile. Let's live a life full of adventures, my love! 🎈✨</p>
-      <button id="quitBtn" class="quit-btn" type="button">Quit 💌</button>
     </div>
   </section>
 
@@ -464,7 +537,6 @@
     const response = document.getElementById("response");
     const answerTitle = document.getElementById("answerTitle");
     const answerMessage = document.getElementById("answerMessage");
-    const quitBtn = document.getElementById("quitBtn");
     const closeX = document.getElementById("closeX");
 
     const floatingSymbols = ["💖", "💕", "💗", "💓", "🎈", "🎉", "✨", "🌸"];
@@ -486,43 +558,54 @@
 
     function createFlyingItem() {
       const item = document.createElement("span");
+      const width = window.innerWidth || document.documentElement.clientWidth;
+      const height = window.innerHeight || document.documentElement.clientHeight;
+      const startX = randomBetween(8, Math.max(9, width - 60));
+      const endX = startX + randomBetween(-60, 60);
+
       item.className = "floating-item";
       item.textContent = floatingSymbols[Math.floor(Math.random() * floatingSymbols.length)];
-      item.style.left = randomBetween(2, 96) + "vw";
-      item.style.fontSize = randomBetween(24, 58) + "px";
-      item.style.animationDuration = randomBetween(3.2, 6.2) + "s";
+      item.style.fontSize = randomBetween(22, width < 560 ? 42 : 58) + "px";
+      item.style.animationDuration = randomBetween(3.4, 6.2) + "s";
+      item.style.setProperty("--start-x", startX + "px");
+      item.style.setProperty("--start-y", height + 50 + "px");
+      item.style.setProperty("--end-x", endX + "px");
       document.body.appendChild(item);
 
-      setTimeout(() => item.remove(), 6500);
+      setTimeout(() => item.remove(), 6800);
     }
 
     function createButtonPop(button) {
       const rect = button.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
+      const isSmallScreen = window.innerWidth < 560;
+      const heartCount = isSmallScreen ? 28 : 42;
+      const sparkleCount = isSmallScreen ? 14 : 22;
+      const distance = isSmallScreen ? 170 : 260;
 
-      for (let i = 0; i < 36; i++) {
+      for (let i = 0; i < heartCount; i++) {
         const heart = document.createElement("span");
         heart.className = "pop-heart";
         heart.textContent = i % 5 === 0 ? "🎈" : ["💖", "💕", "💗", "💘"][i % 4];
         heart.style.left = centerX + "px";
         heart.style.top = centerY + "px";
-        heart.style.fontSize = randomBetween(20, 42) + "px";
-        heart.style.setProperty("--x", randomBetween(-260, 260) + "px");
-        heart.style.setProperty("--y", randomBetween(-260, 180) + "px");
+        heart.style.fontSize = randomBetween(18, isSmallScreen ? 34 : 42) + "px";
+        heart.style.setProperty("--x", randomBetween(-distance, distance) + "px");
+        heart.style.setProperty("--y", randomBetween(-distance, distance * 0.7) + "px");
         document.body.appendChild(heart);
         setTimeout(() => heart.remove(), 1300);
       }
 
-      for (let i = 0; i < 18; i++) {
+      for (let i = 0; i < sparkleCount; i++) {
         const sparkle = document.createElement("span");
         sparkle.className = "sparkle";
         sparkle.textContent = "✨";
         sparkle.style.left = centerX + "px";
         sparkle.style.top = centerY + "px";
-        sparkle.style.fontSize = randomBetween(16, 32) + "px";
-        sparkle.style.setProperty("--x", randomBetween(-220, 220) + "px");
-        sparkle.style.setProperty("--y", randomBetween(-220, 160) + "px");
+        sparkle.style.fontSize = randomBetween(14, isSmallScreen ? 26 : 32) + "px";
+        sparkle.style.setProperty("--x", randomBetween(-distance, distance) + "px");
+        sparkle.style.setProperty("--y", randomBetween(-distance, distance * 0.65) + "px");
         document.body.appendChild(sparkle);
         setTimeout(() => sparkle.remove(), 1000);
       }
@@ -539,11 +622,12 @@
       response.classList.add("show");
 
       let count = 0;
+      const maxItems = window.innerWidth < 560 ? 48 : 80;
       const party = setInterval(() => {
         createFlyingItem();
         count++;
-        if (count > 75) clearInterval(party);
-      }, 80);
+        if (count > maxItems) clearInterval(party);
+      }, 90);
     }
 
     function closePopup() {
@@ -552,7 +636,6 @@
 
     yesBtn.addEventListener("click", () => celebrate(yesBtn, "yes"));
     ofCourseBtn.addEventListener("click", () => celebrate(ofCourseBtn, "ofCourse"));
-    quitBtn.addEventListener("click", closePopup);
     closeX.addEventListener("click", closePopup);
 
     response.addEventListener("click", (event) => {
@@ -567,7 +650,14 @@
       }
     });
 
-    setInterval(createFlyingItem, 950);
+    function startFloatingBackground() {
+      for (let i = 0; i < 8; i++) {
+        setTimeout(createFlyingItem, i * 260);
+      }
+      setInterval(createFlyingItem, window.innerWidth < 560 ? 700 : 950);
+    }
+
+    window.addEventListener("load", startFloatingBackground);
   </script>
 </body>
 </html>
